@@ -1,7 +1,8 @@
 /*jshint laxbreak:true */
 (function (window) {
 	'use strict';
-
+// PROBING APP ________________________________________ */
+	// console.log('template.js')
 	var htmlEscapes = {
 		'&': '&amp;',
 		'<': '&lt;',
@@ -70,7 +71,7 @@
 				completed = 'completed';
 				checked = 'checked';
 			}
-
+			// remplace les placeholders par les vraies valeurs
 			template = template.replace('{{id}}', data[i].id);
 			template = template.replace('{{title}}', escape(data[i].title));
 			template = template.replace('{{completed}}', completed);

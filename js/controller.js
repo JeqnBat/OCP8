@@ -1,6 +1,7 @@
 (function (window) {
 	'use strict';
-
+	// PROBING APP ________________________________________ */
+		// console.log('controller.js')
 	/**
 	 * Takes a model and view and acts as the controller between them
 	 *
@@ -47,13 +48,13 @@
 	}
 
 	/**
-	 * Loads and initialises the view
+	 * Charge & initialise la vue
 	 *
 	 * @param {string} '' | 'active' | 'completed'
 	 */
 	Controller.prototype.setView = function (locationHash) {
 		var route = locationHash.split('/')[1];
-		var page = route || '';
+		var page = route || ''; // ?? route ou '' ?
 		this._updateFilterState(page);
 	};
 
@@ -93,6 +94,7 @@
 	 * object and it'll handle the DOM insertion and saving of the new item.
 	 */
 	Controller.prototype.addItem = function (title) {
+		console.log('a')
 		var self = this;
 
 		if (title.trim() === '') {
@@ -100,6 +102,7 @@
 		}
 
 		self.model.create(title, function () {
+			console.log(1)
 			self.view.render('clearNewTodo');
 			self._filter(true);
 		});

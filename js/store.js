@@ -1,7 +1,8 @@
 /*jshint eqeqeq:false */
 (function (window) {
 	'use strict';
-
+// PROBING APP ________________________________________ */
+	// console.log('store.js')
 	/**
 	 * Creates a new client side storage object and will create an empty
 	 * collection if no collection already exists.
@@ -80,10 +81,10 @@
 
 		callback = callback || function () {};
 
-		// Generate an ID
-	    var newId = ""; 
+		// Generate an ID - ça ne devrait être fait que dans le else
+	    var newId = "";
 	    var charset = "0123456789";
-
+			// bug potentiel ; il faut vérifier qu'on n'a pas 2x la même série de chiffres
         for (var i = 0; i < 6; i++) {
      		newId += charset.charAt(Math.floor(Math.random() * charset.length));
 		}
@@ -104,8 +105,8 @@
 		} else {
 
     		// Assign an ID
-			updateData.id = parseInt(newId);
-    
+			updateData.id = parseInt(newId); // no filter
+
 
 			todos.push(updateData);
 			localStorage[this._dbName] = JSON.stringify(data);
@@ -123,7 +124,7 @@
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
 		var todoId;
-		
+
 		for (var i = 0; i < todos.length; i++) {
 			if (todos[i].id == id) {
 				todoId = todos[i].id;

@@ -1,17 +1,17 @@
 /*global qs, qsa, $on, $parent, $delegate */
-
 (function (window) {
 	'use strict';
+// PROBING APP ________________________________________ */
 
 	/**
-	     * View that abstracts away the browser's DOM completely.
-	     * It has two simple entry points:
-	     *
-	     *   - bind(eventName, handler)
-	     *     Takes a todo application event and registers the handler
-	     *   - render(command, parameterObject)
-	     *     Renders the given command with the options
-	     */
+	 * View that abstracts away the browser's DOM completely.
+	 * It has two simple entry points:
+	 *
+	 *   - bind(eventName, handler)
+	 *     Takes a todo application event and registers the handler
+	 *   - render(command, parameterObject)
+	 *     Renders the given command with the options
+	 */
 	function View(template) {
 		this.template = template;
 

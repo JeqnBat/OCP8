@@ -1,6 +1,7 @@
 (function (window) {
 	'use strict';
-
+// PROBING APP ________________________________________ */
+	// console.log('model.js')
 	/**
 	 * Creates a new Model instance and hooks up the storage.
 	 *
@@ -18,6 +19,8 @@
 	 * @param {function} [callback] The callback to fire after the model is created
 	 */
 	Model.prototype.create = function (title, callback) {
+		console.log('b')
+		// équivaut à title existe = true
 		title = title || '';
 		callback = callback || function () {};
 
@@ -25,7 +28,7 @@
 			title: title.trim(),
 			completed: false
 		};
-
+		console.log(newItem)
 		this.storage.save(newItem, callback);
 	};
 
