@@ -1,60 +1,56 @@
 (function (window) {
 	'use strict';
-// PROBING APP ________________________________________ */
-	// console.log('model.js')
-	/**
-	 * Creates a new Model instance and hooks up the storage.
-	 *
-	 * @constructor
-	 * @param {object} storage A reference to the client side storage class
-	 */
+
+// OBJET Model ________________________________________ */
+// 1. Crée des instances de Model
+// 2. Connecte le storage à ces instances en le prenant en paramètre
 	function Model(storage) {
 		this.storage = storage;
 	}
-
-	/**
-	 * Creates a new todo model
-	 *
-	 * @param {string} [title] The title of the task
-	 * @param {function} [callback] The callback to fire after the model is created
-	 */
+// MÉTHODES ___________________________________________ */
+// I. model.create()
+// 1. Crée un nouveau todo model
 	Model.prototype.create = function (title, callback) {
-		console.log('b')
-		// équivaut à title existe = true
-		title = title || '';
-		callback = callback || function () {};
-
+		// S'il y a un title en argument lors de l'appel, alors le sélectionner
+		// (la chaîne logique s'interrompt sur le premier true qu'elle rencontre)
+		title = title || ''; // remplace if/else
+		// pareil pour le callback, soit il est appelé lors de l'appel
+		callback = callback || function () {}; // soit c'est une fonction vide
+		// objet newItem a un titre et un état completed faux par défaut
 		var newItem = {
 			title: title.trim(),
 			completed: false
 		};
-		console.log(newItem)
+		// Utilise la méthode de store.js pour sauvegarder l'item dans le localStorage
 		this.storage.save(newItem, callback);
 	};
 
-	/**
-	 * Finds and returns a model in storage. If no query is given it'll simply
-	 * return everything. If you pass in a string or number it'll look that up as
-	 * the ID of the model to find. Lastly, you can pass it an object to match
-	 * against.
-	 *
-	 * @param {string|number|object} [query] A query to match models against
-	 * @param {function} [callback] The callback to fire after the model is found
-	 *
-	 * @example
+// II. model.read()
+// 1. Trouve et retourne un modèle à l'intérieur du storage.
+// 2. Retourne tout le storage si la méthode est appelée sans requête au départ.
+// 3. Cherche un modèle dans le storage grâce à son ID en passant un string ou un number à la méthode qui les compare
+// 4. Compare à un objet qui lui est envoyé
+/** examples:
 	 * model.read(1, func); // Will find the model with an ID of 1
 	 * model.read('1'); // Same as above
-	 * //Below will find a model with foo equalling bar and hello equalling world.
+	 * Below will find a model with foo equalling bar and hello equalling world.
 	 * model.read({ foo: 'bar', hello: 'world' });
 	 */
 	Model.prototype.read = function (query, callback) {
-		var queryType = typeof query;
+		// stocke le data type de 'query' dans queryType
+		var queryType = typeof query; // string, boolean, number (?)
 		callback = callback || function () {};
 
+		// si le data type de query est 'function' (ndlr: ce data type est incorrect mais utilisé par convention)
 		if (queryType === 'function') {
+			// alors le callback devient cette fonction
 			callback = query;
+			// retourne le résultat de la méthode findAll() de store avec le callback en argument
 			return this.storage.findAll(callback);
+		// si le data type de query est string ou number
 		} else if (queryType === 'string' || queryType === 'number') {
+			// on transforme query en entier
+			// NOTE: As of ECMAScript 5, the default is the decimal radix (10) -> ça ne devrait donc rien changer avec ou sans '10'
 			query = parseInt(query, 10);
 			this.storage.find({ id: query }, callback);
 		} else {

@@ -1,7 +1,5 @@
 (function (window) {
 	'use strict';
-	// PROBING APP ________________________________________ */
-		// console.log('controller.js')
 	/**
 	 * Takes a model and view and acts as the controller between them
 	 *
@@ -9,6 +7,10 @@
 	 * @param {object} model The model instance
 	 * @param {object} view The view instance
 	 */
+// Objet Controller ___________________________________ */
+/*
+	
+*/
 	function Controller(model, view) {
 		var self = this;
 		self.model = model;
@@ -94,7 +96,6 @@
 	 * object and it'll handle the DOM insertion and saving of the new item.
 	 */
 	Controller.prototype.addItem = function (title) {
-		console.log('a')
 		var self = this;
 
 		if (title.trim() === '') {
@@ -102,7 +103,6 @@
 		}
 
 		self.model.create(title, function () {
-			console.log(1)
 			self.view.render('clearNewTodo');
 			self._filter(true);
 		});

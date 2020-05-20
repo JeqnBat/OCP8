@@ -75,6 +75,9 @@
 	 * @param {function} callback The callback to fire after saving
 	 * @param {number} id An optional param to enter an ID of an item to update
 	 */
+// ADDING / UPDATING ITEMS ____________________________ */
+	// sauvegarde DATA dans DataBase. Si l'item n'existe pas, elle sera créée
+	// Sinon la méthode updatera les propriétés de l'item existante
 	Store.prototype.save = function (updateData, callback, id) {
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
