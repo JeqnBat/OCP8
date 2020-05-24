@@ -1,13 +1,9 @@
 /*global app, $on */
 (function () {
 	'use strict';
-// ce bloc décrit l'objet qu'il précède :
 // 1. description textuelle
 // 2. (a)type de paramètre, (b)nom du paramètre, (c)description textuelle du paramètre
-
 	/**
-	 * Sets up a brand new Todo list.
-	 *
 	 * @param {string} name The name of your new to do list.
 	 */
 
@@ -23,7 +19,7 @@
 				5a. model
 				5b. view
 */
-	// OBJET 'Todo' qui prend un 'name' en paramètre
+// OBJET 'Todo' qui prend un 'name' en paramètre
 	function Todo(name) {
 		this.storage = new app.Store(name);
 		this.model = new app.Model(this.storage);

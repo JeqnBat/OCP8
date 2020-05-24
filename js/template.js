@@ -2,7 +2,6 @@
 (function (window) {
 	'use strict';
 // PROBING APP ________________________________________ */
-	// console.log('template.js')
 	var htmlEscapes = {
 		'&': '&amp;',
 		'<': '&lt;',

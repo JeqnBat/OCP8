@@ -10,10 +10,9 @@
 		 pour deux types d'événements différents :
 		 	a. chargement de la fenêtre
 			b. changement du 'hash'
-		 pour chacun de ces événements, l'event listener appelle une fonction
-		 'setView()'
+		 pour chacun de ces événements, l'event listener appelle une fonction 'setView()'
 */
-	// SÉLECTEURS de classes CSS
+// SÉLECTEURS de classes CSS
 	// Sélectionne le PREMIER élément dans un contexte défini (scope)
 	window.qs = function (selector, scope) {
 		// soit TOUT le document, soit un SCOPE plus restreint (à passer en argument à l'appel)
@@ -31,7 +30,7 @@
 		target.addEventListener(type, callback, !!useCapture);
 	};
 
-	// Méthode appelée dans view.js
+// Méthode appelée dans view.js
 	window.$delegate = function (target, selector, type, handler) {
 		function dispatchEvent(event) {
 			var targetElement = event.target;

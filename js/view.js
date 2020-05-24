@@ -1,8 +1,10 @@
 /*global qs, qsa, $on, $parent, $delegate */
 (function (window) {
 	'use strict';
-// PROBING APP ________________________________________ */
 
+// OBJET View _________________________________________ */
+// 1. L'objet View représente le DOM
+// 2. Il a 2 points d'entrée
 	/**
 	 * View that abstracts away the browser's DOM completely.
 	 * It has two simple entry points:
@@ -26,7 +28,8 @@
 		this.$toggleAll = qs('.toggle-all');
 		this.$newTodo = qs('.new-todo');
 	}
-
+	
+// MÉTHODES ___________________________________________ */
 	View.prototype._removeItem = function (id) {
 		var elem = qs('[data-id="' + id + '"]');
 

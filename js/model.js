@@ -4,11 +4,14 @@
 // OBJET Model ________________________________________ */
 // 1. Crée des instances de Model
 // 2. Connecte le storage à ces instances en le prenant en paramètre
+	/**
+	 * @param {object} storage
+	 */
 	function Model(storage) {
 		this.storage = storage;
 	}
-// MÉTHODES ___________________________________________ */
-// I. model.create()
+// MÉTHODES (5) _______________________________________ */
+// I. model.create(title, callback)
 // 1. Crée un nouveau todo model
 	Model.prototype.create = function (title, callback) {
 		// S'il y a un title en argument lors de l'appel, alors le sélectionner
@@ -25,12 +28,12 @@
 		this.storage.save(newItem, callback);
 	};
 
-// II. model.read()
+// II. model.read(query, callback)
 // 1. Trouve et retourne un modèle à l'intérieur du storage.
 // 2. Retourne tout le storage si la méthode est appelée sans requête au départ.
 // 3. Cherche un modèle dans le storage grâce à son ID en passant un string ou un number à la méthode qui les compare
 // 4. Compare à un objet qui lui est envoyé
-/** examples:
+	/** examples:
 	 * model.read(1, func); // Will find the model with an ID of 1
 	 * model.read('1'); // Same as above
 	 * Below will find a model with foo equalling bar and hello equalling world.
@@ -50,70 +53,84 @@
 		// si le data type de query est string ou number
 		} else if (queryType === 'string' || queryType === 'number') {
 			// on transforme query en entier
-			// NOTE: As of ECMAScript 5, the default is the decimal radix (10) -> ça ne devrait donc rien changer avec ou sans '10'
+			// NOTE: As of ECMAScript 5, the default is the decimal radix (10) ->
+			// ça ne devrait donc rien changer avec ou sans '10'; proposer de le retirer ?
 			query = parseInt(query, 10);
+			// on utilise la méthode storage.find() avec la valeur de query
 			this.storage.find({ id: query }, callback);
 		} else {
+		// si le data type de query n'est ni 'function' ni 'string' ni 'number'
+			// on utilise storage.find() avec la query telle qu'elle est entrée dans l'appel
 			this.storage.find(query, callback);
 		}
 	};
 
+// III. model.update(id, data, callback)
+// 1. Met à jour un modèle en lui attribuant une ID
+// 2. Met à jour les data du modèle
+// 3. Appelle un callback qd la mise à jour est achevée
 	/**
-	 * Updates a model by giving it an ID, data to update, and a callback to fire when
-	 * the update is complete.
-	 *
-	 * @param {number} id The id of the model to update
-	 * @param {object} data The properties to update and their new value
-	 * @param {function} callback The callback to fire when the update is complete.
+	 * @param {number} id l'ID du modèle à mettre à jour
+	 * @param {object} data Les propriétés à mettre à jour avec leurs nouvelles valeurs
+	 * @param {function} callback Le callback à appeler lorsque la mise à jour est terminée
 	 */
 	Model.prototype.update = function (id, data, callback) {
 		this.storage.save(data, callback, id);
 	};
 
+// IV. model.remove(id, callback)
+// 1. Retire un modèle du storage
 	/**
-	 * Removes a model from storage
-	 *
-	 * @param {number} id The ID of the model to remove
-	 * @param {function} callback The callback to fire when the removal is complete.
+	 * @param {number} id ID du modèle à retirer
+	 * @param {function} callback le callback à appeler après
 	 */
 	Model.prototype.remove = function (id, callback) {
 		this.storage.remove(id, callback);
 	};
 
+// IV. model.removeAll(callback)
+// 1. Retire TOUTES les données du storage
 	/**
-	 * WARNING: Will remove ALL data from storage.
-	 *
-	 * @param {function} callback The callback to fire when the storage is wiped.
+	 * @param {function} callback le callback à appeler après
 	 */
 	Model.prototype.removeAll = function (callback) {
 		this.storage.drop(callback);
 	};
 
+// V. model.getCount(callback)
+// 1. retourne la somme de tous les todos
 	/**
 	 * Returns a count of all todos
 	 */
 	Model.prototype.getCount = function (callback) {
+		// création d'un objet qui rassemble tous les todos
 		var todos = {
 			active: 0,
 			completed: 0,
 			total: 0
 		};
-
+		//
 		this.storage.findAll(function (data) {
+			// pour chaque membre de data
 			data.forEach(function (todo) {
+				// si todo.completed est true alors
 				if (todo.completed) {
+					// ajouter +1 à la propriété 'completed' de 'todos'
 					todos.completed++;
 				} else {
+					// ajouter +1 à la propriété 'active' de 'todos'
 					todos.active++;
 				}
-
+				// dans tous les cas, ajouter +1 à chaque tour pour obtenir le total
 				todos.total++;
 			});
+			// appeler le callback avec l'objet todos en argument
 			callback(todos);
 		});
 	};
 
-	// Export to window
+	// Exporter l'objet Model avec toutes ses méthodes à window.app
 	window.app = window.app || {};
-	window.app.Model = Model;
+	// = new Model ?
+	window.app.Model = Model; // c'est ici que se fait l'équivalence dans app.js
 })(window);
