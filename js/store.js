@@ -157,7 +157,8 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 			while (isExistingId(newId, todos)) {
 				newId = generateNewId();
 			}
-			console.log('Element with ID: ' + newId + ' has been created')
+			// suppr console.log()
+			// console.log('Element with ID: ' + newId + ' has been created')
   		// assigne la nouvelle ID
 			updateData.id = parseInt(newId);
 			// push l'array 'todos' avec updateData

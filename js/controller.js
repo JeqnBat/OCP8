@@ -1,21 +1,18 @@
 (function (window) {
 	'use strict';
+
+// OBJECT Controller __________________________________ */
+// 1. Prend un objet 'model' et un objet 'view' et agit comme un contrôleur entre eux
 	/**
-	 * Takes a model and view and acts as the controller between them
-	 *
 	 * @constructor
 	 * @param {object} model The model instance
 	 * @param {object} view The view instance
 	 */
-// Objet Controller ___________________________________ */
-/*
-	
-*/
 	function Controller(model, view) {
 		var self = this;
 		self.model = model;
 		self.view = view;
-
+		// on utilise la méthode 'view.bind(event, handler)'
 		self.view.bind('newTodo', function (title) {
 			self.addItem(title);
 		});
@@ -48,31 +45,38 @@
 			self.toggleAll(status.completed);
 		});
 	}
-
+// MÉTHODES (5) _______________________________________ */
+// I. controller.setView(locationHash)
+// 1. Charge & initialise la vue
 	/**
-	 * Charge & initialise la vue
-	 *
 	 * @param {string} '' | 'active' | 'completed'
+	 * ici 'hash' doit être compris comme "morceau de"
 	 */
 	Controller.prototype.setView = function (locationHash) {
-		var route = locationHash.split('/')[1];
+		// La méthode split() permet de diviser une chaîne de caractères
+		// à partir d'un séparateur pour fournir un tableau de sous-chaînes.
+		// Ici, divise 'locationHash' à partir de '/' et crée un array avec les morceaux découpés.
+		var route = locationHash.split('/')[1]; // renvoie le 2eme membre de l'array créé par division de 'locationHash'
 		var page = route || ''; // ?? route ou '' ?
 		this._updateFilterState(page);
 	};
 
+// II. controller.showAll()
+// 1. un événement à démarrer au chargement.
+// 2. affichera tous les items de la todo list
 	/**
-	 * An event to fire on load. Will get all items and display them in the
-	 * todo-list
 	 */
 	Controller.prototype.showAll = function () {
 		var self = this;
+		// appel à la méthode (read) de model.
 		self.model.read(function (data) {
+			// appel à render(viewCmd, parameter) de view
 			self.view.render('showEntries', data);
 		});
 	};
-
+// III. controller.showActive()
+// 1. affiche toutes les tâches actives
 	/**
-	 * Renders all active tasks
 	 */
 	Controller.prototype.showActive = function () {
 		var self = this;
@@ -80,9 +84,9 @@
 			self.view.render('showEntries', data);
 		});
 	};
-
+// IV. controller.showCompleted()
+// 1. toutes les tâches complétées…
 	/**
-	 * Renders all completed tasks
 	 */
 	Controller.prototype.showCompleted = function () {
 		var self = this;
@@ -90,26 +94,32 @@
 			self.view.render('showEntries', data);
 		});
 	};
-
+// V. controller.addItem(title)
+// 1. un événement à envoyer dès qu'on ajoute un item.
+// 2. envoie l'objet de l'event qui s'occupe du DOM & sauvegarde la nouvelle item
 	/**
-	 * An event to fire whenever you want to add an item. Simply pass in the event
-	 * object and it'll handle the DOM insertion and saving of the new item.
 	 */
 	Controller.prototype.addItem = function (title) {
 		var self = this;
+		// La méthode trim() permet de retirer les blancs en début et fin de chaîne.
+		// Les blancs considérés sont les caractères d'espacement
+		// (espace, tabulation, espace insécable, etc.)
+		// ainsi que les caractères de fin de ligne (LF, CR, etc.).
 
+		// si le titre une fois 'trimé' est un string vide,
+		// c'est qu'il ne contenait pas de caractères : arrête la fonction
 		if (title.trim() === '') {
 			return;
 		}
-
+		// sinon
 		self.model.create(title, function () {
 			self.view.render('clearNewTodo');
 			self._filter(true);
 		});
 	};
-
+// VI. controller.editItem
+// 1. déclenche le mode d'édition d'item
 	/*
-	 * Triggers the item editing mode.
 	 */
 	Controller.prototype.editItem = function (id) {
 		var self = this;
@@ -117,32 +127,35 @@
 			self.view.render('editItem', {id: id, title: data[0].title});
 		});
 	};
-
+// VII. controller.editItemSave(id, title)
+// 1. clot le mode édition après un succès
 	/*
-	 * Finishes the item editing mode successfully.
 	 */
 	Controller.prototype.editItemSave = function (id, title) {
 		var self = this;
-
+		// OPTIMISATION #2 : trim() ici ?
+		// tant que title[0] égale un espace
 		while (title[0] === " ") {
+			// title = title moins le premier caractère
 			title = title.slice(1);
 		}
-
+		// tant que title[title.length-1] égale un espace
 		while (title[title.length-1] === " ") {
+			// title = title à partir de 0 moins les deux derniers caractères
 			title = title.slice(0, -1);
 		}
-
+		// si le titre contient des caractères
 		if (title.length !== 0) {
 			self.model.update(id, {title: title}, function () {
 				self.view.render('editItemDone', {id: id, title: title});
 			});
 		} else {
+			// si le titre est vide
 			self.removeItem(id);
 		}
 	};
-
+// VIII. controller.editItemCancel
 	/*
-	 * Cancels the item editing mode.
 	 */
 	Controller.prototype.editItemCancel = function (id) {
 		var self = this;
@@ -164,10 +177,10 @@
 		self.model.read(function(data) {
 			items = data;
 		});
-
+		// optimisation : à quoi ça sert ?
 		items.forEach(function(item) {
 			if (item.id === id) {
-				console.log("Element with ID: " + id + " has been removed.");
+				// console.log("Element with ID: " + id + " has been removed.");
 			}
 		});
 

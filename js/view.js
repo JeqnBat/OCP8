@@ -4,7 +4,7 @@
 
 // OBJET View _________________________________________ */
 // 1. L'objet View représente le DOM
-// 2. Il a 2 points d'entrée :
+// 2. Il a 2 points d'entrée dans l'appli (2 méthodes):
 //			a. bind(eventName, handler)
 //			   Prend un event et enregistre le handler
 //			b. render(command, parameterObject)
@@ -145,7 +145,7 @@
 				self._editItemDone(parameter.id, parameter.title);
 			}
 		};
-		// lors de l'appel, un chiffre remplace viewCmd
+		// lors de l'appel, une des clefs de viewCommands remplace viewCmd
 		viewCommands[viewCmd]();
 	};
 // VIII. view_editItemDone
