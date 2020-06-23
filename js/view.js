@@ -10,6 +10,7 @@
 //			b. render(command, parameterObject)
 //				 Effectue la commande appelée avec les options
 	function View(template) {
+		// contient l'objet Template.js avec ttes ses méthodes
 		this.template = template;
 
 		this.ENTER_KEY = 13;
@@ -23,7 +24,7 @@
 		this.$toggleAll = qs('.toggle-all');
 		this.$newTodo = qs('.new-todo');
 	}
-// MÉTHODES ( ) _______________________________________ */
+// MÉTHODES (11) ______________________________________ */
 // I. view._removeItem(id)
 // 1. Retire un élément de la <li> grâce à son id
 	View.prototype._removeItem = function (id) {
@@ -33,6 +34,8 @@
 			// retirer 'elem' de '$todolist'
 			this.$todoList.removeChild(elem);
 		}
+		// marker pour les tests
+		console.log(`View._removeItem(${id}) (1)`);
 	};
 // II. view._clearCompletedButton(completedCount, visible)
 // 1.
@@ -40,6 +43,8 @@
 		this.$clearCompleted.innerHTML = this.template.clearCompletedButton(completedCount);
 		// si 'visible' est true -> display:block; else, display:none;
 		this.$clearCompleted.style.display = visible ? 'block' : 'none';
+		// marker pour les tests
+		console.log(`View._clearCompletedButton(${completedCount}, ${visible}) (2)`);
 	};
 // III. view._setFilter(currentPage)
 	View.prototype._setFilter = function (currentPage) {
@@ -49,6 +54,8 @@
 		// sélectionne les éléments de classe filters dans le scope [href="#/' + currentPage + '"]
 		// et leur affecte la classe 'selected'
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
+		// marker pour les tests
+		console.log(`View._setFilter(${currentPage}) (3)`);
 	};
 // IV. view._elementComplete(id, completed)
 // 1.
@@ -64,6 +71,8 @@
 
 		// In case it was toggled from an event and not by clicking the checkbox
 		qs('input', listItem).checked = completed;
+		// marker pour les tests
+		console.log(`View._elementComplete(${id}, ${completed}) (4)`);
 	};
 // V. view._editItem(id, title)
 // 1.
@@ -86,6 +95,8 @@
 		input.focus();
 		// passer 'title' comme valeur de input
 		input.value = title;
+		// marker pour les tests
+		console.log(`View._editItem(${id}, ${title}) (5)`);
 	};
 // VI. view._editItemDone(id, title)
 	View.prototype._editItemDone = function (id, title) {
@@ -103,6 +114,8 @@
 		qsa('label', listItem).forEach(function (label) {
 			label.textContent = title;
 		});
+		// marker pour les tests
+		console.log(`View._editItemDone(${id}, ${title}) (6)`);
 	};
 // VII. view.render(viewCmd, parameter)
 // 1. Distribue les méthodes précédentes par le biais d'un objet (viewCommands)
@@ -147,11 +160,17 @@
 		};
 		// lors de l'appel, une des clefs de viewCommands remplace viewCmd
 		viewCommands[viewCmd]();
+		// marker pour les tests
+		console.log(`View.render(${viewCmd}, ${parameter}) (7)`);
 	};
-// VIII. view_editItemDone
+// VIII. view._itemId(element)
 	View.prototype._itemId = function (element) {
 		var li = $parent(element, 'li');
+		// parseInt NOTE: As of ECMAScript 5, the default is the decimal radix (10) ->
+		// ça ne devrait donc rien changer avec ou sans '10'; proposer de le retirer ?
 		return parseInt(li.dataset.id, 10);
+		// marker pour les tests
+		console.log(`View._itemId(${element}) (8)`);
 	};
 // IX. view._bindItemEditDone(handler)
 	View.prototype._bindItemEditDone = function (handler) {
@@ -172,6 +191,8 @@
 				this.blur();
 			}
 		});
+		// marker pour les tests
+		console.log(`View._bindItemEditDone(handler) (9)`);
 	};
 // X. view._bindItemEditCancel(handler)
 	View.prototype._bindItemEditCancel = function (handler) {
@@ -184,6 +205,8 @@
 				handler({id: self._itemId(this)});
 			}
 		});
+		// marker pour les tests
+		console.log(`View._bindItemEditCancel(handler) (10)`);
 	};
 // XI. view.bind(event, handler)
 	View.prototype.bind = function (event, handler) {
@@ -227,6 +250,8 @@
 		} else if (event === 'itemEditCancel') {
 			self._bindItemEditCancel(handler);
 		}
+		// marker pour les tests
+		console.log(`View.bind(event, handler) (11)`);
 	};
 
 	// Export to window

@@ -2,15 +2,18 @@
 
 describe('controller', function () {
 	'use strict';
+	// ces 3 variables sont définies dans beforeEach
+	var subject, model, view, controller;
 
-	var subject, model, view;
-
+	// fonction 'setUpModel(todos)' - prépare l'objet 'model', 2nd paramètre de 'controller'
 	var setUpModel = function (todos) {
+		// '.and.callFake' simule un appel de model.read() en appelant les mêmes arguments
 		model.read.and.callFake(function (query, callback) {
 			callback = callback || query;
 			callback(todos);
 		});
 
+		// obtient le nombre de todos actifs, terminés et le total
 		model.getCount.and.callFake(function (callback) {
 
 			var todoCounts = {
@@ -18,6 +21,7 @@ describe('controller', function () {
 					return !todo.completed;
 				}).length,
 				completed: todos.filter(function (todo) {
+					// double !! = booléen inversé, retourne true ou false
 					return !!todo.completed;
 				}).length,
 				total: todos.length
@@ -39,6 +43,7 @@ describe('controller', function () {
 		});
 	};
 
+	// 'view' = paramètre #2 de l'objet controller
 	var createViewStub = function () {
 		var eventRegistry = {};
 		return {
@@ -51,19 +56,55 @@ describe('controller', function () {
 			}
 		};
 	};
-
+	// run avant chaque test
 	beforeEach(function () {
+		// mock = simuler; on simule des appels au code
+		// on utilise des SPIES pour MOCKER, çàd simuler des appels de fonction
 		model = jasmine.createSpyObj('model', ['read', 'getCount', 'remove', 'create', 'update']);
+		/* createSpyObj retourne un objet ( ici 'model') qui a des propriétés pour chaque string
+					 model.read()
+				   model.getCount()
+					 model.remove()
+					 model.create()
+					 model.update()
+	 */
 		view = createViewStub();
+		// hérite de toutes les méthodes & propriétés de l'objet controller
 		subject = new app.Controller(model, view);
 	});
+	/* LEXIQUE :
+			.entry = une ligne dans le modèle (une valeur supplémentaire à l'array data[])
+			.route = suffixe de l'url (ex: '/#', '/#/active')
+	*/
+	// test de tests
+	it('should return my name', function() {
+		spyOn(subject, 'quiSuisJe').and.callThrough();
+		var me = subject.quiSuisJe();
+		expect(subject.quiSuisJe).toHaveBeenCalled();
+		expect(me).toEqual('JB');
+	});
 
+	// TEST #1
 	it('should show entries on start-up', function () {
-		// TODO: write test
+		var todo = [
+			{title: 'my todo1', completed: true},
+			{title: 'my todo2', completed: true},
+			{title: 'my todo3', completed: true},
+			{title: 'my todo4', completed: false},
+			{title: 'my todo5', completed: false}
+		];
+		setUpModel(todo);
+
+		subject.setView('');
+
+		expect(view.render).toHaveBeenCalledWith('showEntries', todo);
+		expect(todo.length).toEqual(5);
+		expect(model.getCount).toHaveBeenCalled();
+		// expect(model.getCount.active).toEqual(3);
 	});
 
 	describe('routing', function () {
-
+		// TEST #2
 		it('should show all entries without a route', function () {
 			var todo = {title: 'my todo'};
 			setUpModel([todo]);
@@ -71,6 +112,9 @@ describe('controller', function () {
 			subject.setView('');
 
 			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
+			// ??
+			// spyOn(subject, '_filter');
+			// expect(subject._filter).toHaveBeenCalled();
 		});
 
 		it('should show all entries without "all" route', function () {
@@ -81,13 +125,23 @@ describe('controller', function () {
 
 			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
 		});
-
+		// TEST #3
 		it('should show active entries', function () {
-			// TODO: write test
-		});
+			var todo = {title: 'my todo'};
+			setUpModel([todo]);
 
+			subject.setView('#/active');
+
+			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
+		});
+		// TEST #4
 		it('should show completed entries', function () {
-			// TODO: write test
+			var todo = {title: 'my todo'};
+			setUpModel([todo]);
+
+			subject.setView('#/completed');
+
+			expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
 		});
 	});
 

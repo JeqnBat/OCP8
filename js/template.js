@@ -91,7 +91,8 @@
 
 			view = view + template;
 		}
-
+		// marker pour les tests
+		console.log(`Template.show(${data}) (1)`);
 		return view;
 	};
 // II. template.itemCounter(activeTodos)
@@ -103,6 +104,8 @@
 	Template.prototype.itemCounter = function (activeTodos) {
 		// si activeTodos = 1 alors plural est vide, sinon il équivaut à la string 's'
 		var plural = activeTodos === 1 ? '' : 's';
+		// marker pour les tests
+		console.log(`Template.show(${activeTodos}) (2)`);
 		// retourne activeTodos en BOLD + rajoute un 's' à 'item' si jamais il y a + d'un activeTodo
 		return '<strong>' + activeTodos + '</strong> item' + plural + ' left';
 	};
@@ -118,6 +121,8 @@
 		} else {
 			return '';
 		}
+		// marker pour les tests
+		console.log(`Template.clearCompletedButton(${completedTodos}) (3)`);
 	};
 
 	// Export to window

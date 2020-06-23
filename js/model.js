@@ -10,7 +10,7 @@
 	function Model(storage) {
 		this.storage = storage;
 	}
-// MÉTHODES (5) _______________________________________ */
+// MÉTHODES (6) _______________________________________ */
 // I. model.create(title, callback)
 // 1. Crée un nouveau todo model
 	Model.prototype.create = function (title, callback) {
@@ -26,6 +26,8 @@
 		};
 		// Utilise la méthode de store.js pour sauvegarder l'item dans le localStorage
 		this.storage.save(newItem, callback);
+		// marker pour les tests
+		console.log(`Model.create(${title}, callback) (1)`);
 	};
 
 // II. model.read(query, callback)
@@ -63,6 +65,8 @@
 			// on utilise storage.find() avec la query telle qu'elle est entrée dans l'appel
 			this.storage.find(query, callback);
 		}
+		// marker pour les tests
+		console.log(`Model.read(${query}, callback) (2)`);
 	};
 
 // III. model.update(id, data, callback)
@@ -76,6 +80,8 @@
 	 */
 	Model.prototype.update = function (id, data, callback) {
 		this.storage.save(data, callback, id);
+		// marker pour les tests
+		console.log(`Model.update(${id}, ${data}, callback) (3)`);
 	};
 
 // IV. model.remove(id, callback)
@@ -86,24 +92,28 @@
 	 */
 	Model.prototype.remove = function (id, callback) {
 		this.storage.remove(id, callback);
+		// marker pour les tests
+		console.log(`Model.remove(${id}, callback) (4)`);
 	};
 
-// IV. model.removeAll(callback)
+// V. model.removeAll(callback)
 // 1. Retire TOUTES les données du storage
 	/**
 	 * @param {function} callback le callback à appeler après
 	 */
 	Model.prototype.removeAll = function (callback) {
 		this.storage.drop(callback);
+		// marker pour les tests
+		console.log(`Model.removeAll(callback) (5)`);
 	};
 
-// V. model.getCount(callback)
+// VI. model.getCount(callback)
 // 1. retourne la somme de tous les todos
 	/**
 	 * Returns a count of all todos
 	 */
 	Model.prototype.getCount = function (callback) {
-		// création d'un objet qui rassemble tous les todos
+		// création d'un objet qui rassemble toutes les statistques des todos
 		var todos = {
 			active: 0,
 			completed: 0,
@@ -127,6 +137,8 @@
 			// appeler le callback avec l'objet todos en argument
 			callback(todos);
 		});
+		// marker pour les tests
+		console.log(`Model.getCount(callback) (6)`);
 	};
 
 	// Exporter l'objet Model avec toutes ses méthodes à window.app
