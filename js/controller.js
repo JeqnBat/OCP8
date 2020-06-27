@@ -15,7 +15,7 @@
 
 		self.model = model;
 		self.view = view;
-		// on utilise la méthode 'view.bind(event, handler)'
+		// APPELS de la méthode 'view.bind(event, handler)'
 		self.view.bind('newTodo', function (title) {
 			self.addItem(title);
 		});

@@ -197,6 +197,12 @@ describe('controller', function () {
 
 	describe('toggle all', function () {
 		it('should toggle all todos to completed', function () {
+			// cliquer sur <input> class 'toggle-all'
+			/* 1. view.bind('toggleAll', handler)
+				 2. controller.toggleAll(completed)
+				 3. model.read()
+				 4. controller._filter()
+			*/
 			// TODO: write test
 		});
 

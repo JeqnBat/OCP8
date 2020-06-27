@@ -47,7 +47,8 @@
 		*/
 	}
 
+	console.log(document.location.hash);
 	$on(window, 'load', setView);
 	$on(window, 'hashchange', setView);
-	
+
 })();

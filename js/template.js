@@ -72,6 +72,7 @@
 		var i, l;
 		var view = '';
 		// pour chaque membre de data
+		// #OPTIMISATION ?? Pkoi pas i < data.length ?
 		for (i = 0, l = data.length; i < l; i++) {
 			var template = this.defaultTemplate;
 			var completed = '';
@@ -105,7 +106,7 @@
 		// si activeTodos = 1 alors plural est vide, sinon il équivaut à la string 's'
 		var plural = activeTodos === 1 ? '' : 's';
 		// marker pour les tests
-		console.log(`Template.show(${activeTodos}) (2)`);
+		console.log(`Template.itemCounter(${activeTodos}) (2)`);
 		// retourne activeTodos en BOLD + rajoute un 's' à 'item' si jamais il y a + d'un activeTodo
 		return '<strong>' + activeTodos + '</strong> item' + plural + ' left';
 	};

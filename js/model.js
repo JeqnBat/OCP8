@@ -66,7 +66,7 @@
 			this.storage.find(query, callback);
 		}
 		// marker pour les tests
-		console.log(`Model.read(${query}, callback) (2)`);
+		console.log(`Model.read(${query}, ${callback}) (2)`);
 	};
 
 // III. model.update(id, data, callback)

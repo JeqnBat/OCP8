@@ -192,7 +192,7 @@
 			}
 		});
 		// marker pour les tests
-		console.log(`View._bindItemEditDone(handler) (9)`);
+		console.log(`View._bindItemEditDone(${handler}) (9)`);
 	};
 // X. view._bindItemEditCancel(handler)
 	View.prototype._bindItemEditCancel = function (handler) {
@@ -251,10 +251,17 @@
 			self._bindItemEditCancel(handler);
 		}
 		// marker pour les tests
-		console.log(`View.bind(event, handler) (11)`);
+		console.log(`View.bind(${event}, ${handler}) (11)`);
 	};
 
 	// Export to window
 	window.app = window.app || {};
 	window.app.View = View;
-}(window));
+})(window);
+
+/*
+	(function (window) {
+		'use strict';
+		...
+	} (window));
+*/
