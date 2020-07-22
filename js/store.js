@@ -9,7 +9,7 @@ Pour en savoir plus sur la coercition in JavaScript,
 voir Truth, Equality and JavaScript by Angus Croll.*/
 (function (window) {
 	'use strict';
-// 2 fonctions pour générer un ID unique ______________ */
+// Deux fonctions pour générer un ID unique ______________ */
 	// 1. generateNewId()
 	function generateNewId() {
 		var generatedId = "";
@@ -50,7 +50,6 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 			var data = {
 				todos: []
 			};
-			console.log(data + 'data LOOOOOOOOOOOOOOOL')
 			// convertit l'objet 'data' en string et stocke le résultat dans localStorage[name]
 			localStorage[name] = JSON.stringify(data);
 		}
@@ -74,6 +73,8 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 	 * });
 	 */
 	Store.prototype.find = function (query, callback) {
+		// marker pour les tests
+		console.log(`Store.find(${query}, callback) (1)`);
 		// Si aucun callback n'a été appelé -> arrêter la méthode
 		if (!callback) {
 			return;
@@ -100,8 +101,6 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 			// callback renvoie true
 			return true;
 		}));
-		// marker pour les tests
-		console.log(`Store.find(${query}, callback) (1)`);
 	};
 // II. store.findAll(callback)
 // 1. Va chercher toutes les Datas de la collection
@@ -109,13 +108,13 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 	 * @param {function} callback le callback a appelé après avoir reçu les Datas
 	 */
 	Store.prototype.findAll = function (callback) {
+		// marker pour les tests
+		console.log(`Store.findAll(${callback}) (2)`);
 		// si un callback a été appelé on l'utilise, sinon callback égale une fonction vide
 		callback = callback || function () {};
 		// appelle le callback avec le this de cette méthode
 		// convertit localStorage[this._dbName] en objet
 		callback.call(this, JSON.parse(localStorage[this._dbName]).todos);
-		// marker pour les tests
-		console.log(`Store.findAll(callback) (2)`);
 	};
 // III. store.save(updateData, callback, id)
 // 1. Sauvegarde la donnée dans la DB.
@@ -127,13 +126,13 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 	 * @param {number} id paramètre optionnel : ID de l'item à sauvegarder
 	 */
 	Store.prototype.save = function (updateData, callback, id) {
+		// marker pour les tests
+		console.log(`Store.save(${updateData}, ${callback}, ${id}) (3)`);
 		// convertit localStorage[this._dbName] en objet JS
 		var data = JSON.parse(localStorage[this._dbName]);
 		// stocke la propriété 'todos' de data dans la variable 'todos'
 		var todos = data.todos;
-
 		callback = callback || function () {};
-
 		// Si on a appelé la méthode avec un ID en argument
 		// Trouve l'item associé à l'ID et update ses propriétés
 		if (id) {
@@ -168,8 +167,6 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 			// ??
 			callback.call(this, [updateData]);
 		}
-		// marker pour les tests
-		console.log(`Store.save(${updateData}, callback, ${id}) (3)`);
 	};
 // IV. store.remove(id, callback)
 // 1. Retire un item du store en se basant sur son ID
@@ -178,6 +175,8 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 	 * @param {function} callback le callback à appeler après l'action
 	 */
 	Store.prototype.remove = function (id, callback) {
+		// marker pour les tests
+		console.log(`Store.remove(${id}, ${callback}) (4)`);
 		// convertit localStorage[this._dbName] en objet JS et le stocke dans data
 		var data = JSON.parse(localStorage[this._dbName]);
 		// stocke la propriété 'todos' de 'data' dans la variable 'todos'
@@ -205,23 +204,23 @@ voir Truth, Equality and JavaScript by Angus Croll.*/
 		// convertit 'data' en string et stocke le résultat dans localStorage[this._dbName]
 		localStorage[this._dbName] = JSON.stringify(data);
 		callback.call(this, todos);
-		// marker pour les tests
-		console.log(`Store.remove(${id}, callback) (4)`);
 	};
 // V. store.drop(callback)
+// OPTIMISATION #5 - cette méthode n'est appelée nulle part
+// Vérifier toutes les méthodes de l'appli
 // 1. Largue tout le storage et repart à 0
 	/**
 	 * @param {function} callback The callback to fire after dropping the data
 	 */
 	Store.prototype.drop = function (callback) {
+		// marker pour les tests
+		console.log(`Store.drop(${callback}) (5)`);
 		// crée un objet 'data' avec une propriété 'todos' qui est un tableau
 		var data = {todos: []};
 		// convertit l'objet 'data' en string et stocke le résultat dans localStorage[this._dbName]
 		localStorage[this._dbName] = JSON.stringify(data);
 		// appelle le callback
 		callback.call(this, data.todos);
-		// marker pour les tests
-		console.log(`Store.drop(callback) (5)`);
 	};
 
 	// Export to window

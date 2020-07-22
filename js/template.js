@@ -27,7 +27,7 @@
 	var escape = function (string) {
 		// condition ? exprSiVrai : exprSiFaux
 		// teste 'string & reHasUnescapedHtml.test(string)'
-		return (string && reHasUnescapedHtml.test(string))
+		return (string && reHasUnescapedHtml.test(string)) // test() match son string avec un autre et renvoie true si c'est le même
 			// Écrire après un return ? Pq c'est censé être sur la même ligne : opérateur conditionnel
 			// si le test renvoie true alors remplacer la string
 			? string.replace(reUnescapedHtml, escapeHtmlChar)
@@ -41,7 +41,7 @@
 	 * @constructor
 	 */
 	function Template() {
-		// apparence de la liste contenant les Todos
+		// code HTML d'un 'TODO'
 		this.defaultTemplate
 		=	'<li data-id="{{id}}" class="{{completed}}">'
 		+		'<div class="view">'
@@ -69,6 +69,8 @@
 	 * });
 	 */
 	Template.prototype.show = function (data) {
+		// marker pour les tests
+		console.log(`Template.show(${data}) (1)`);
 		var i, l;
 		var view = '';
 		// pour chaque membre de data
@@ -92,8 +94,6 @@
 
 			view = view + template;
 		}
-		// marker pour les tests
-		console.log(`Template.show(${data}) (1)`);
 		return view;
 	};
 // II. template.itemCounter(activeTodos)
@@ -103,10 +103,10 @@
 	 * @returns {string} un string contenant le nombre.
 	 */
 	Template.prototype.itemCounter = function (activeTodos) {
-		// si activeTodos = 1 alors plural est vide, sinon il équivaut à la string 's'
-		var plural = activeTodos === 1 ? '' : 's';
 		// marker pour les tests
 		console.log(`Template.itemCounter(${activeTodos}) (2)`);
+		// si activeTodos = 1 alors plural est vide, sinon il équivaut à la string 's'
+		var plural = activeTodos === 1 ? '' : 's';
 		// retourne activeTodos en BOLD + rajoute un 's' à 'item' si jamais il y a + d'un activeTodo
 		return '<strong>' + activeTodos + '</strong> item' + plural + ' left';
 	};
@@ -117,13 +117,13 @@
 	 * @returns {string} un string contenant ce nombre
 	 */
 	Template.prototype.clearCompletedButton = function (completedTodos) {
+		// marker pour les tests
+		console.log(`Template.clearCompletedButton(${completedTodos}) (3)`);
 		if (completedTodos > 0) {
 			return 'Clear completed';
 		} else {
 			return '';
 		}
-		// marker pour les tests
-		console.log(`Template.clearCompletedButton(${completedTodos}) (3)`);
 	};
 
 	// Export to window

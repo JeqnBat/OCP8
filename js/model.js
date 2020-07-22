@@ -14,6 +14,8 @@
 // I. model.create(title, callback)
 // 1. Crée un nouveau todo model
 	Model.prototype.create = function (title, callback) {
+		// marker pour les tests
+		console.log(`Model.create(${title}, ${callback}) (1)`);
 		// S'il y a un title en argument lors de l'appel, alors le sélectionner
 		// (la chaîne logique s'interrompt sur le premier true qu'elle rencontre)
 		title = title || ''; // remplace if/else
@@ -26,10 +28,7 @@
 		};
 		// Utilise la méthode de store.js pour sauvegarder l'item dans le localStorage
 		this.storage.save(newItem, callback);
-		// marker pour les tests
-		console.log(`Model.create(${title}, callback) (1)`);
 	};
-
 // II. model.read(query, callback)
 // 1. Trouve et retourne un modèle à l'intérieur du storage.
 // 2. Retourne tout le storage si la méthode est appelée sans requête au départ.
@@ -42,6 +41,7 @@
 	 * model.read({ foo: 'bar', hello: 'world' });
 	 */
 	Model.prototype.read = function (query, callback) {
+		console.log(`Model.read(${query}, ${callback}) (2)`);
 		// stocke le data type de 'query' dans queryType
 		var queryType = typeof query; // string, boolean, number (?)
 		callback = callback || function () {};
@@ -65,10 +65,7 @@
 			// on utilise storage.find() avec la query telle qu'elle est entrée dans l'appel
 			this.storage.find(query, callback);
 		}
-		// marker pour les tests
-		console.log(`Model.read(${query}, ${callback}) (2)`);
 	};
-
 // III. model.update(id, data, callback)
 // 1. Met à jour un modèle en lui attribuant une ID
 // 2. Met à jour les data du modèle
@@ -79,11 +76,10 @@
 	 * @param {function} callback Le callback à appeler lorsque la mise à jour est terminée
 	 */
 	Model.prototype.update = function (id, data, callback) {
-		this.storage.save(data, callback, id);
 		// marker pour les tests
-		console.log(`Model.update(${id}, ${data}, callback) (3)`);
+		console.log(`Model.update(${id}, ${data}, ${callback}) (3)`);
+		this.storage.save(data, callback, id);
 	};
-
 // IV. model.remove(id, callback)
 // 1. Retire un modèle du storage
 	/**
@@ -91,28 +87,29 @@
 	 * @param {function} callback le callback à appeler après
 	 */
 	Model.prototype.remove = function (id, callback) {
-		this.storage.remove(id, callback);
 		// marker pour les tests
-		console.log(`Model.remove(${id}, callback) (4)`);
+		console.log(`Model.remove(${id}, ${callback}) (4)`);
+		this.storage.remove(id, callback);
 	};
-
 // V. model.removeAll(callback)
+// OPTIMISATION #6, lié à storage.drop(), cette méthode n'est pas appelée par l'appli
 // 1. Retire TOUTES les données du storage
 	/**
 	 * @param {function} callback le callback à appeler après
 	 */
 	Model.prototype.removeAll = function (callback) {
-		this.storage.drop(callback);
 		// marker pour les tests
-		console.log(`Model.removeAll(callback) (5)`);
+		console.log(`Model.removeAll(${callback}) (5)`);
+		this.storage.drop(callback);
 	};
-
 // VI. model.getCount(callback)
 // 1. retourne la somme de tous les todos
 	/**
 	 * Returns a count of all todos
 	 */
 	Model.prototype.getCount = function (callback) {
+		// marker pour les tests
+		console.log(`Model.getCount(${callback}) (6)`);
 		// création d'un objet qui rassemble toutes les statistques des todos
 		var todos = {
 			active: 0,
@@ -137,8 +134,6 @@
 			// appeler le callback avec l'objet todos en argument
 			callback(todos);
 		});
-		// marker pour les tests
-		console.log(`Model.getCount(callback) (6)`);
 	};
 
 	// Exporter l'objet Model avec toutes ses méthodes à window.app

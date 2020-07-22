@@ -28,38 +28,40 @@
 // I. view._removeItem(id)
 // 1. Retire un élément de la <li> grâce à son id
 	View.prototype._removeItem = function (id) {
+		// marker pour les tests
+		console.log(`View._removeItem(${id}) (1)`);
 		var elem = qs('[data-id="' + id + '"]');
 		// si 'elem' existe
 		if (elem) {
 			// retirer 'elem' de '$todolist'
 			this.$todoList.removeChild(elem);
 		}
-		// marker pour les tests
-		console.log(`View._removeItem(${id}) (1)`);
 	};
 // II. view._clearCompletedButton(completedCount, visible)
 // 1.
 	View.prototype._clearCompletedButton = function (completedCount, visible) {
+		// marker pour les tests
+		console.log(`View._clearCompletedButton(${completedCount}, ${visible}) (2)`);
 		this.$clearCompleted.innerHTML = this.template.clearCompletedButton(completedCount);
 		// si 'visible' est true -> display:block; else, display:none;
 		this.$clearCompleted.style.display = visible ? 'block' : 'none';
-		// marker pour les tests
-		console.log(`View._clearCompletedButton(${completedCount}, ${visible}) (2)`);
 	};
 // III. view._setFilter(currentPage)
 	View.prototype._setFilter = function (currentPage) {
+		// marker pour les tests
+		console.log(`View._setFilter(${currentPage}) (3)`);
 		// sélectionne les éléments de classe filters dans le scope selected et
 		// les vide de leurs classes
 		qs('.filters .selected').className = '';
 		// sélectionne les éléments de classe filters dans le scope [href="#/' + currentPage + '"]
 		// et leur affecte la classe 'selected'
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
-		// marker pour les tests
-		console.log(`View._setFilter(${currentPage}) (3)`);
 	};
 // IV. view._elementComplete(id, completed)
 // 1.
 	View.prototype._elementComplete = function (id, completed) {
+		// marker pour les tests
+		console.log(`View._elementComplete(${id}, ${completed}) (4)`);
 		var listItem = qs('[data-id="' + id + '"]');
 		// si 'listItem' n'existe pas
 		if (!listItem) {
@@ -71,12 +73,12 @@
 
 		// In case it was toggled from an event and not by clicking the checkbox
 		qs('input', listItem).checked = completed;
-		// marker pour les tests
-		console.log(`View._elementComplete(${id}, ${completed}) (4)`);
 	};
 // V. view._editItem(id, title)
 // 1.
 	View.prototype._editItem = function (id, title) {
+		// marker pour les tests
+		console.log(`View._editItem(${id}, ${title}) (5)`);
 		// 'listItem' stocke l'élément du DOM dont l'id a été appelé
 		var listItem = qs('[data-id="' + id + '"]');
 		// si 'listItem' n'existe pas : return
@@ -95,11 +97,11 @@
 		input.focus();
 		// passer 'title' comme valeur de input
 		input.value = title;
-		// marker pour les tests
-		console.log(`View._editItem(${id}, ${title}) (5)`);
 	};
 // VI. view._editItemDone(id, title)
 	View.prototype._editItemDone = function (id, title) {
+		// marker pour les tests
+		console.log(`View._editItemDone(${id}, ${title}) (6)`);
 		var listItem = qs('[data-id="' + id + '"]');
 
 		if (!listItem) {
@@ -114,12 +116,12 @@
 		qsa('label', listItem).forEach(function (label) {
 			label.textContent = title;
 		});
-		// marker pour les tests
-		console.log(`View._editItemDone(${id}, ${title}) (6)`);
 	};
 // VII. view.render(viewCmd, parameter)
 // 1. Distribue les méthodes précédentes par le biais d'un objet (viewCommands)
 	View.prototype.render = function (viewCmd, parameter) {
+		// marker pour les tests
+		console.log(`View.render(${viewCmd}, ${parameter}) (7)`);
 		var self = this;
 		// crée un objet 'viewCommands'
 		// chaque clef de l'objet représente une commande, chaque valeur, l'action à effectuer lorsque la commande est appelée
@@ -160,20 +162,20 @@
 		};
 		// lors de l'appel, une des clefs de viewCommands remplace viewCmd
 		viewCommands[viewCmd]();
-		// marker pour les tests
-		console.log(`View.render(${viewCmd}, ${parameter}) (7)`);
 	};
 // VIII. view._itemId(element)
 	View.prototype._itemId = function (element) {
+		// marker pour les tests
+		console.log(`View._itemId(${element}) (8)`);
 		var li = $parent(element, 'li');
 		// parseInt NOTE: As of ECMAScript 5, the default is the decimal radix (10) ->
 		// ça ne devrait donc rien changer avec ou sans '10'; proposer de le retirer ?
 		return parseInt(li.dataset.id, 10);
-		// marker pour les tests
-		console.log(`View._itemId(${element}) (8)`);
 	};
 // IX. view._bindItemEditDone(handler)
 	View.prototype._bindItemEditDone = function (handler) {
+		// marker pour les tests
+		console.log(`View._bindItemEditDone(${handler}) (9)`);
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'blur', function () {
 			if (!this.dataset.iscanceled) {
@@ -191,11 +193,11 @@
 				this.blur();
 			}
 		});
-		// marker pour les tests
-		console.log(`View._bindItemEditDone(${handler}) (9)`);
 	};
 // X. view._bindItemEditCancel(handler)
 	View.prototype._bindItemEditCancel = function (handler) {
+		// marker pour les tests
+		console.log(`View._bindItemEditCancel(handler) (10)`);
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'keyup', function (event) {
 			if (event.keyCode === self.ESCAPE_KEY) {
@@ -205,11 +207,11 @@
 				handler({id: self._itemId(this)});
 			}
 		});
-		// marker pour les tests
-		console.log(`View._bindItemEditCancel(handler) (10)`);
 	};
 // XI. view.bind(event, handler)
 	View.prototype.bind = function (event, handler) {
+		// marker pour les tests
+		console.log(`View.bind(${event}, ${handler}) (11)`);
 		var self = this;
 		if (event === 'newTodo') {
 			$on(self.$newTodo, 'change', function () {
@@ -250,8 +252,6 @@
 		} else if (event === 'itemEditCancel') {
 			self._bindItemEditCancel(handler);
 		}
-		// marker pour les tests
-		console.log(`View.bind(${event}, ${handler}) (11)`);
 	};
 
 	// Export to window
