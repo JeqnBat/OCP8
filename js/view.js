@@ -1,21 +1,27 @@
-/*global qs, qsa, $on, $parent, $delegate */
+/* global qs, qsa, $on, $parent, $delegate */
 (function (window) {
 	'use strict';
 
-// OBJET View _________________________________________ */
-// 1. L'objet View représente le DOM
-// 2. Il a 2 points d'entrée dans l'appli (2 méthodes):
-//			a. bind(eventName, handler)
-//			   Prend un event et enregistre le handler
-//			b. render(command, parameterObject)
-//				 Effectue la commande appelée avec les options
+	/**
+	 * <b>DESCR:</b><br>
+   * View that abstracts away the browser's DOM completely.
+   * It has two simple entry points:
+   *
+   *   - bind(eventName, handler)
+   *     Takes a todo application event and registers the handler
+   *   - render(command, parameterObject)
+   *     Renders the given command with the options
+	 *
+	 * @constructor
+	 *
+	 * @param {object} template Instance of the Template class.
+   */
 	function View(template) {
-		// contient l'objet Template.js avec ttes ses méthodes
 		this.template = template;
 
 		this.ENTER_KEY = 13;
 		this.ESCAPE_KEY = 27;
-		// 'qs' défini dans 'helpers.js' -> qs(selector, scope)
+
 		this.$todoList = qs('.todo-list');
 		this.$todoItemCounter = qs('.todo-count');
 		this.$clearCompleted = qs('.clear-completed');
@@ -24,84 +30,103 @@
 		this.$toggleAll = qs('.toggle-all');
 		this.$newTodo = qs('.new-todo');
 	}
+
 // MÉTHODES (11) ______________________________________ */
-// I. view._removeItem(id)
-// 1. Retire un élément de la <li> grâce à son id
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Will remove one item based on its ID.
+	 *
+	 * @param {number} id The item's ID.
+	 *
+	 */
 	View.prototype._removeItem = function (id) {
-		// marker pour les tests
-		console.log(`View._removeItem(${id}) (1)`);
 		var elem = qs('[data-id="' + id + '"]');
-		// si 'elem' existe
+
 		if (elem) {
-			// retirer 'elem' de '$todolist'
 			this.$todoList.removeChild(elem);
 		}
 	};
-// II. view._clearCompletedButton(completedCount, visible)
-// 1.
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Will remove all completed items on button click.
+	 *
+	 * @param {number} completedCount Number of items completed.
+	 * @param {boolean} visible Item is || isn't visible.
+	 *
+	 */
 	View.prototype._clearCompletedButton = function (completedCount, visible) {
-		// marker pour les tests
-		console.log(`View._clearCompletedButton(${completedCount}, ${visible}) (2)`);
 		this.$clearCompleted.innerHTML = this.template.clearCompletedButton(completedCount);
-		// si 'visible' est true -> display:block; else, display:none;
 		this.$clearCompleted.style.display = visible ? 'block' : 'none';
 	};
-// III. view._setFilter(currentPage)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Applies filter to the view.
+	 *
+	 * @param {string} currentPage '' | 'active' | 'completed'
+	 *
+	 */
 	View.prototype._setFilter = function (currentPage) {
-		// marker pour les tests
-		console.log(`View._setFilter(${currentPage}) (3)`);
-		// sélectionne les éléments de classe filters dans le scope selected et
-		// les vide de leurs classes
 		qs('.filters .selected').className = '';
-		// sélectionne les éléments de classe filters dans le scope [href="#/' + currentPage + '"]
-		// et leur affecte la classe 'selected'
 		qs('.filters [href="#/' + currentPage + '"]').className = 'selected';
 	};
-// IV. view._elementComplete(id, completed)
-// 1.
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Sets item status to 'completed'
+	 *
+	 * @param {number} id The item's ID.
+	 * @param {boolean} completed Item's completed status.
+	 *
+	 */
 	View.prototype._elementComplete = function (id, completed) {
-		// marker pour les tests
-		console.log(`View._elementComplete(${id}, ${completed}) (4)`);
 		var listItem = qs('[data-id="' + id + '"]');
-		// si 'listItem' n'existe pas
+
 		if (!listItem) {
 			return;
 		}
-		// si 'listItem' existe
-			// si completed existe alors className de listItem = 'completed', sinon className = ''
+
 		listItem.className = completed ? 'completed' : '';
 
-		// In case it was toggled from an event and not by clicking the checkbox
 		qs('input', listItem).checked = completed;
 	};
-// V. view._editItem(id, title)
-// 1.
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Edit item's content.
+	 *
+	 * @param {number} id The item's ID.
+	 * @param {string} title Item's title.
+	 *
+	 */
 	View.prototype._editItem = function (id, title) {
-		// marker pour les tests
-		console.log(`View._editItem(${id}, ${title}) (5)`);
-		// 'listItem' stocke l'élément du DOM dont l'id a été appelé
 		var listItem = qs('[data-id="' + id + '"]');
-		// si 'listItem' n'existe pas : return
 		if (!listItem) {
 			return;
 		}
-		// Sinon, modifie le className de listItem	en ajoutant la string ' editing'
+
 		listItem.className = listItem.className + ' editing';
-		// crée une variable input qui stocke un élément créé du DOM et appelé 'input'
+
 		var input = document.createElement('input');
-		// ajoute la classe 'edit' à cet élément
 		input.className = 'edit';
-		// ajoute input à listItem
+
 		listItem.appendChild(input);
-		// focus input
 		input.focus();
-		// passer 'title' comme valeur de input
+
 		input.value = title;
 	};
-// VI. view._editItemDone(id, title)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Exits Item editing mode.
+	 *
+	 * @param {number} id The item's ID.
+	 * @param {string} title Item's title.
+	 *
+	 */
 	View.prototype._editItemDone = function (id, title) {
-		// marker pour les tests
-		console.log(`View._editItemDone(${id}, ${title}) (6)`);
 		var listItem = qs('[data-id="' + id + '"]');
 
 		if (!listItem) {
@@ -117,14 +142,18 @@
 			label.textContent = title;
 		});
 	};
-// VII. view.render(viewCmd, parameter)
-// 1. Distribue les méthodes précédentes par le biais d'un objet (viewCommands)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Renders view for all the methods of this object.
+	 *
+	 * @param {string} viewCmd The command to execute.
+	 * @param {number|object} parameter The data to pass in the called function.
+	 *
+	 */
 	View.prototype.render = function (viewCmd, parameter) {
-		// marker pour les tests
-		console.log(`View.render(${viewCmd}, ${parameter}) (7)`);
 		var self = this;
-		// crée un objet 'viewCommands'
-		// chaque clef de l'objet représente une commande, chaque valeur, l'action à effectuer lorsque la commande est appelée
+
 		var viewCommands = {
 			showEntries: function () {
 				self.$todoList.innerHTML = self.template.show(parameter);
@@ -160,22 +189,31 @@
 				self._editItemDone(parameter.id, parameter.title);
 			}
 		};
-		// lors de l'appel, une des clefs de viewCommands remplace viewCmd
+
 		viewCommands[viewCmd]();
 	};
-// VIII. view._itemId(element)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Finds one item's ID based on its DOM dataset.
+	 *
+	 * @param {string} element The DOM element containing item's dataset.
+	 *
+	 * @returns {number} The item's ID.
+	 */
 	View.prototype._itemId = function (element) {
-		// marker pour les tests
-		console.log(`View._itemId(${element}) (8)`);
 		var li = $parent(element, 'li');
-		// parseInt NOTE: As of ECMAScript 5, the default is the decimal radix (10) ->
-		// ça ne devrait donc rien changer avec ou sans '10'; proposer de le retirer ?
+
 		return parseInt(li.dataset.id, 10);
 	};
-// IX. view._bindItemEditDone(handler)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * ???
+	 *
+	 * @param {function} handler
+	 */
 	View.prototype._bindItemEditDone = function (handler) {
-		// marker pour les tests
-		console.log(`View._bindItemEditDone(${handler}) (9)`);
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'blur', function () {
 			if (!this.dataset.iscanceled) {
@@ -188,16 +226,19 @@
 
 		$delegate(self.$todoList, 'li .edit', 'keypress', function (event) {
 			if (event.keyCode === self.ENTER_KEY) {
-				// Remove the cursor from the input when you hit enter just like if it
-				// were a real form
 				this.blur();
 			}
 		});
 	};
-// X. view._bindItemEditCancel(handler)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * ???
+	 *
+	 * @param {function} handler
+	 */
 	View.prototype._bindItemEditCancel = function (handler) {
-		// marker pour les tests
-		console.log(`View._bindItemEditCancel(handler) (10)`);
+		console.log(handler)
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'keyup', function (event) {
 			if (event.keyCode === self.ESCAPE_KEY) {
@@ -208,10 +249,15 @@
 			}
 		});
 	};
-// XI. view.bind(event, handler)
+
+	/**
+	 * <b>DESCR:</b><br>
+	 * Binds an event to a function handler.
+	 *
+	 * @param {string} event The name of the event.
+	 * @param {function} handler The function to call with the event.
+	 */
 	View.prototype.bind = function (event, handler) {
-		// marker pour les tests
-		console.log(`View.bind(${event}, ${handler}) (11)`);
 		var self = this;
 		if (event === 'newTodo') {
 			$on(self.$newTodo, 'change', function () {
@@ -254,14 +300,6 @@
 		}
 	};
 
-	// Export to window
 	window.app = window.app || {};
 	window.app.View = View;
 })(window);
-
-/*
-	(function (window) {
-		'use strict';
-		...
-	} (window));
-*/
