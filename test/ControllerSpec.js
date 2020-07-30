@@ -2,26 +2,21 @@
 
 describe('controller', function () {
 	'use strict';
-	// ces 3 variables sont définies dans beforeEach
+
 	var subject, model, view, controller;
 
-	// fonction 'setUpModel(todos)' - prépare l'objet 'model', 2nd paramètre de 'controller'
 	var setUpModel = function (todos) {
-		// '.and.callFake' simule un appel de model.read() en appelant les mêmes arguments
 		model.read.and.callFake(function (query, callback) {
 			callback = callback || query;
 			callback(todos);
 		});
 
-		// obtient le nombre de todos actifs, terminés et le total
 		model.getCount.and.callFake(function (callback) {
-
 			var todoCounts = {
 				active: todos.filter(function (todo) {
 					return !todo.completed;
 				}).length,
 				completed: todos.filter(function (todo) {
-					// double !! = booléen inversé, retourne true ou false
 					return !!todo.completed;
 				}).length,
 				total: todos.length
@@ -43,7 +38,6 @@ describe('controller', function () {
 		});
 	};
 
-	// 'view' = paramètre #2 de l'objet controller
 	var createViewStub = function () {
 		var eventRegistry = {};
 		return {
@@ -56,48 +50,22 @@ describe('controller', function () {
 			}
 		};
 	};
-	// run avant chaque test
+
 	beforeEach(function () {
-		// mock = simuler; on simule des appels au code
-		// on utilise des SPIES pour MOCKER, çàd simuler des appels de fonction
 		model = jasmine.createSpyObj('model', ['read', 'getCount', 'remove', 'create', 'update']);
-		/* createSpyObj retourne un objet ( ici 'model') qui a des propriétés pour chaque string
-					 model.read()
-				   model.getCount()
-					 model.remove()
-					 model.create()
-					 model.update()
-	 */
 		view = createViewStub();
-		// hérite de toutes les méthodes & propriétés de l'objet controller
+
 		subject = new app.Controller(model, view);
 	});
-	/* LEXIQUE :
-			.entry = une ligne dans le modèle (une valeur supplémentaire à l'array data[])
-			.route = suffixe de l'url (ex: '/#', '/#/active')
-			.[object object] dans la console = paire clé: propriété (ex: '{completed: true}')
-			. ATTENTION!! l'ajout d'un string dans la console rend impossible la lecture de l'OBJET!!
-			. pour lire l'objet il faut l'afficher SEUL dans la console : console.log(todos); sans + 'TODOS'
-			.Structure des objets todos (3 propriétés) :
-								todos:[{
-									"title":"eazeazea",
-									"completed":true,
-									"id":99663
-								}]
-			  On peut retrouver ces objets dans store.js, méthode findAll()
-			.Impossible d'accéder aux propriétés de l'objet MODEL car celui qu'on utilise ici est un MOCK
-					On a faké les méthodes de model pour SPYON et vérifier les valeurs avec lesquelles elles sont appelées.
-					MAIS, tout le reste est inaccessible : il est donc impossible de vérifier combien de todos sont actifs
-					puisque cette information est stockée dans le vrai MODEL et qu'on n'y accède pas.
-	*/
+	
 	// TEST #1
 	it('should show entries on start-up', function () {
 		var todo = [
-			{title: 'my todo1', completed: true},
-			{title: 'my todo2', completed: true},
-			{title: 'my todo3', completed: true},
-			{title: 'my todo4', completed: false},
-			{title: 'my todo5', completed: false}
+			{title: 'my todo1', completed: true, id: '156892'},
+			{title: 'my todo2', completed: true, id: '245781'},
+			{title: 'my todo3', completed: true, id: '356478'},
+			{title: 'my todo4', completed: false, id: '412308'},
+			{title: 'my todo5', completed: false, id: '507845'}
 		];
 		setUpModel(todo);
 
@@ -111,11 +79,9 @@ describe('controller', function () {
 		// TEST #2
 		it('should show all entries without a route', function () {
 			var todo = [
-				{title: 'my todo1', completed: true},
-				{title: 'my todo2', completed: true},
-				{title: 'my todo3', completed: true},
-				{title: 'my todo4', completed: false},
-				{title: 'my todo5', completed: false}
+				{title: 'my todo without a route 1', completed: true, id: '486785'},
+				{title: 'my todo without a route 2', completed: true, id: '123789'},
+				{title: 'my todo with a route', completed: false, id: '789122'}
 			];
 			setUpModel(todo);
 
@@ -125,13 +91,10 @@ describe('controller', function () {
 			expect(view.render).toHaveBeenCalledWith('showEntries', todo);
 		});
 
-		it('should show all entries without "all" route', function () {
+		it('should show all entries with "all" route', function () {
 			var todo = [
-				{title: 'my todo1', completed: true},
-				{title: 'my todo2', completed: true},
-				{title: 'my todo3', completed: true},
-				{title: 'my todo4', completed: false},
-				{title: 'my todo5', completed: false}
+				{title: 'my todo with "all" route 1', completed: true, id: '486785'},
+				{title: 'my todo with "all" route 2', completed: true, id: '123789'}
 			];
 			setUpModel(todo);
 
@@ -142,11 +105,8 @@ describe('controller', function () {
 		// TEST #3
 		it('should show active entries', function () {
 			var todo = [
-				{title: 'my todo1', completed: true},
-				{title: 'my todo2', completed: true},
-				{title: 'my todo3', completed: true},
-				{title: 'my todo4', completed: false},
-				{title: 'my todo5', completed: false}
+				{title: 'my completed todo', completed: true, id: '267859'},
+				{title: 'my active todo', completed: false, id: '106785'}
 			];
 			setUpModel(todo);
 
@@ -158,11 +118,8 @@ describe('controller', function () {
 		// TEST #4
 		it('should show completed entries', function () {
 			var todo = [
-				{title: 'my todo1', completed: true},
-				{title: 'my todo2', completed: true},
-				{title: 'my todo3', completed: true},
-				{title: 'my todo4', completed: false},
-				{title: 'my todo5', completed: false}
+				{title: 'my completed todo', completed: true, id: '267859'},
+				{title: 'my active todo', completed: false, id: '106785'}
 			];
 			setUpModel(todo);
 
@@ -220,6 +177,7 @@ describe('controller', function () {
 		setUpModel([todo]);
 
 		subject.setView('');
+
 		expect(view.render).toHaveBeenCalledWith('setFilter', '');
 	});
 // TEST #6
@@ -228,6 +186,7 @@ describe('controller', function () {
 		setUpModel([todo]);
 
 		subject.setView('#/active');
+
 		expect(view.render).toHaveBeenCalledWith('setFilter', 'active');
 	});
 
@@ -235,10 +194,10 @@ describe('controller', function () {
 		// TEST #7
 		it('should toggle all todos to completed', function () {
 			var todo = [
-				{title: 'my todo1', completed: true},
-				{title: 'my todo2', completed: true},
+				{title: 'my todo 1', completed: true},
+				{title: 'my todo 2', completed: true},
 				// {title: 'my todo3', completed: false},
-				{title: 'my todo4', completed: true}
+				{title: 'my todo 4', completed: true}
 			];
 			setUpModel(todo);
 
@@ -247,7 +206,6 @@ describe('controller', function () {
 			view.trigger('toggleAll', jasmine.any(Function));
 
 			expect(view.render).toHaveBeenCalledWith('toggleAll', {checked: true});
-
 		});
 		// TEST #8
 		it('should update the view', function () {

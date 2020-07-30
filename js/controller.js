@@ -48,8 +48,6 @@
 		});
 	}
 
-// MÉTHODES (15) ______________________________________ */
-
 	/**
 	 * <b>DESCR:</b><br>
 	 * Loads & initialises the view.
@@ -101,7 +99,7 @@
 	 * An event that fires everytime an item is added. Simply pass in the event
 	 * object and it'll handle the DOM insertion and saving of the new item.
 	 *
-	 * @param {string} title The item's title
+	 * @param {string} title the new item's title
 	 */
 	Controller.prototype.addItem = function (title) {
 		var self = this;
@@ -120,7 +118,7 @@
 	 * <b>DESCR:</b><br>
 	 * Triggers the item editing mode.
 	 *
-	 * @param {number} id The item's id.
+	 * @param {number} id the edited item's ID
 	 */
 	Controller.prototype.editItem = function (id) {
 		var self = this;
@@ -133,12 +131,12 @@
 	 * <b>DESCR:</b><br>
 	 * Finishes the item editing mode successfully.
 	 *
-	 * @param {number} id The item's id
-	 * @param {string} title The item's title
+	 * @param {number} id the edited item's ID
+	 * @param {string} title the edited item's title
 	 */
 	Controller.prototype.editItemSave = function (id, title) {
 		var self = this;
-
+		// OPTIMIZATION #2
 		title = title.trim()
 
 		if (title.length !== 0) {
@@ -154,7 +152,7 @@
 	 * <b>DESCR:</b><br>
 	 * Cancels the item editing mode.
 	 *
-	 * @param {number} id The item's id
+	 * @param {number} id the edited item's ID
 	 */
 	Controller.prototype.editItemCancel = function (id) {
 		var self = this;
@@ -168,7 +166,7 @@
 	 * By giving it an ID it'll find the DOM element matching that ID,
 	 * remove it from the DOM and also remove it from storage.
 	 *
-	 * @param {number} id The ID of the item to remove from the DOM and storage.
+	 * @param {number} id the ID of the item to remove from the DOM and storage
 	 */
 	Controller.prototype.removeItem = function (id) {
 		var self = this;
@@ -204,9 +202,9 @@
 	 * Give it an ID of a model and a checkbox and it will update the item
 	 * in storage based on the checkbox's state.
 	 *
-	 * @param {number} id The ID of the element to complete or uncomplete.
-	 * @param {object} checkbox The checkbox to check the state of complete or not.
-	 * @param {boolean|undefined} silent Prevent re-filtering the todo items.
+	 * @param {number} id the ID of the item to complete or uncomplete
+	 * @param {boolean} completed item is completed:true, or not:false
+	 * @param {boolean|undefined} silent prevent re-filtering the todo items
 	 */
 	Controller.prototype.toggleComplete = function (id, completed, silent) {
 		var self = this;
@@ -227,7 +225,7 @@
 	 * Will toggle ALL checkboxes' on/off state and completeness of models.
  	 * Just pass in the event object.
 	 *
-	 * @param {boolean} completed Prevent re-filtering the todo items
+	 * @param {boolean} completed prevent re-filtering the todo items
 	 */
 	Controller.prototype.toggleAll = function (completed) {
 		var self = this;
@@ -260,8 +258,10 @@
 	};
 
 	/**
+	 * <b>DESCR:</b><br>
 	 * Re-filters the todo items, based on the active route.
-	 * @param {boolean|undefined} force Forces a re-painting of todo items.
+	 *
+	 * @param {boolean|undefined} force forces a re-painting of todo items
 	 */
 	Controller.prototype._filter = function (force) {
 		var activeRoute = this._activeRoute.charAt(0).toUpperCase() + this._activeRoute.substr(1);
@@ -276,7 +276,9 @@
 	};
 
 	/**
+	 * <b>DESCR:</b><br>
 	 * Simply updates the filter state
+	 *
 	 * @param {string} currentPage '' | 'active' | 'completed'
 	 */
 	Controller.prototype._updateFilterState = function (currentPage) {

@@ -14,7 +14,7 @@
 	 *
 	 * @constructor
 	 *
-	 * @param {object} template Instance of the Template class.
+	 * @param {object} template instance of the Template class
    */
 	function View(template) {
 		this.template = template;
@@ -31,13 +31,11 @@
 		this.$newTodo = qs('.new-todo');
 	}
 
-// MÉTHODES (11) ______________________________________ */
-
 	/**
 	 * <b>DESCR:</b><br>
 	 * Will remove one item based on its ID.
 	 *
-	 * @param {number} id The item's ID.
+	 * @param {number} id the item's ID
 	 *
 	 */
 	View.prototype._removeItem = function (id) {
@@ -52,8 +50,8 @@
 	 * <b>DESCR:</b><br>
 	 * Will remove all completed items on button click.
 	 *
-	 * @param {number} completedCount Number of items completed.
-	 * @param {boolean} visible Item is || isn't visible.
+	 * @param {number} completedCount number of completed items.
+	 * @param {boolean} visible item is:true isn't:false visible.
 	 *
 	 */
 	View.prototype._clearCompletedButton = function (completedCount, visible) {
@@ -75,10 +73,10 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * Sets item status to 'completed'
+	 * Sets item status to 'completed'.
 	 *
-	 * @param {number} id The item's ID.
-	 * @param {boolean} completed Item's completed status.
+	 * @param {number} id the item's ID.
+	 * @param {boolean} completed is the item completed or not.
 	 *
 	 */
 	View.prototype._elementComplete = function (id, completed) {
@@ -97,8 +95,8 @@
 	 * <b>DESCR:</b><br>
 	 * Edit item's content.
 	 *
-	 * @param {number} id The item's ID.
-	 * @param {string} title Item's title.
+	 * @param {number} id the item's ID
+	 * @param {string} title item's title
 	 *
 	 */
 	View.prototype._editItem = function (id, title) {
@@ -122,8 +120,8 @@
 	 * <b>DESCR:</b><br>
 	 * Exits Item editing mode.
 	 *
-	 * @param {number} id The item's ID.
-	 * @param {string} title Item's title.
+	 * @param {number} id the item's ID
+	 * @param {string} title item's title
 	 *
 	 */
 	View.prototype._editItemDone = function (id, title) {
@@ -147,8 +145,8 @@
 	 * <b>DESCR:</b><br>
 	 * Renders view for all the methods of this object.
 	 *
-	 * @param {string} viewCmd The command to execute.
-	 * @param {number|object} parameter The data to pass in the called function.
+	 * @param {string} viewCmd the command to execute
+	 * @param {number|object} parameter the data to pass in the called function
 	 *
 	 */
 	View.prototype.render = function (viewCmd, parameter) {
@@ -197,9 +195,9 @@
 	 * <b>DESCR:</b><br>
 	 * Finds one item's ID based on its DOM dataset.
 	 *
-	 * @param {string} element The DOM element containing item's dataset.
+	 * @param {string} element the DOM element containing item's dataset
 	 *
-	 * @returns {number} The item's ID.
+	 * @returns {number} the item's ID
 	 */
 	View.prototype._itemId = function (element) {
 		var li = $parent(element, 'li');
@@ -209,7 +207,7 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * ???
+	 * Finishes the item's editing sequence.
 	 *
 	 * @param {function} handler
 	 */
@@ -233,12 +231,11 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * ???
+	 * Cancels the item's editing mode.
 	 *
 	 * @param {function} handler
 	 */
 	View.prototype._bindItemEditCancel = function (handler) {
-		console.log(handler)
 		var self = this;
 		$delegate(self.$todoList, 'li .edit', 'keyup', function (event) {
 			if (event.keyCode === self.ESCAPE_KEY) {
@@ -254,8 +251,8 @@
 	 * <b>DESCR:</b><br>
 	 * Binds an event to a function handler.
 	 *
-	 * @param {string} event The name of the event.
-	 * @param {function} handler The function to call with the event.
+	 * @param {string} event the name of the event
+	 * @param {function} handler the function to call with the event
 	 */
 	View.prototype.bind = function (event, handler) {
 		var self = this;

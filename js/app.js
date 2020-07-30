@@ -4,7 +4,13 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * Sets up a new Todo list.
+	 * 'Todo' is the app's main class. It contains all the other classes :
+	 *
+	 *   - Controller
+	 *   - Model
+	 *   - Store
+	 *   - Template
+	 *   - View
 	 *
 	 * @constructor
 	 * @param {string} name The name of your new to do list.

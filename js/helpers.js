@@ -1,16 +1,17 @@
 /*global NodeList */
 (function (window) {
 	'use strict';
+
 	/**
 	 * <b>DESCR:</b><br>
 	 * Get element(s) by CSS selector.
 	 * @function
 	 * @name qs
 	 *
-	 * @param {string} selector
-	 * @param {string} scope
+	 * @param {string} selector the DOM element to select
+	 * @param {string|undefined} scope the DOM element where to select
 	 *
-	 * @returns {object} a DOM element found in scope.
+	 * @returns {object} a DOM element found in scope & matching the selector
 	 */
 	window.qs = function (selector, scope) {
 		return (scope || document).querySelector(selector);
@@ -22,10 +23,10 @@
 	 * @function
 	 * @name qsa
 	 *
-	 * @param {string} selector
-	 * @param {string} scope
+	 * @param {string} selector the DOM elements to select
+	 * @param {string|undefined} scope the DOM element where to select
 	 *
-	 * @returns {object} all DOM elements found in scope.
+	 * @returns {object} all DOM elements found in scope & matching the selector
 	 */
 	window.qsa = function (selector, scope) {
 		return (scope || document).querySelectorAll(selector);
@@ -37,10 +38,10 @@
 	 * @function
 	 * @name $on
 	 *
-	 * @param {object} target
-	 * @param {string} type
-	 * @param {function} callback
-	 * @param {boolean} useCapture
+	 * @param {string|object} target either a DOM element OR the entire window
+	 * @param {string} type the event's listener
+	 * @param {function} callback the function to call after the event
+	 * @param {boolean|undefined} useCapture sorts events order with capture 'true' or 'false'
 	 */
 	window.$on = function (target, type, callback, useCapture) {
 		target.addEventListener(type, callback, !!useCapture);
@@ -53,10 +54,10 @@
 	 * @function
 	 * @name $delegate
 	 *
-	 * @param {object} target
-	 * @param {string} selector
-	 * @param {string} type
-	 * @param {function} handler
+	 * @param {object} target a DOM element
+	 * @param {string} selector a CSS class or HTML tag used as a selector
+	 * @param {string} type the event's listener
+	 * @param {function} handler the function to call when the event is fired
 	 */
 	window.$delegate = function (target, selector, type, handler) {
 		function dispatchEvent(event) {
@@ -81,8 +82,10 @@
 	 * @function
 	 * @name $parent
 	 *
-	 * @param {object} element
-	 * @param {string} tagName
+	 * @param {object} element the DOM element inside which to find the parent
+	 * @param {string} tagName an HTML tag type
+	 *
+	 * @returns {object} the parent node of the target inside the DOM
 	 */
 	window.$parent = function (element, tagName) {
 		if (!element.parentNode) {
@@ -91,6 +94,7 @@
 		if (element.parentNode.tagName.toLowerCase() === tagName.toLowerCase()) {
 			return element.parentNode;
 		}
+
 		return window.$parent(element.parentNode, tagName);
 	};
 

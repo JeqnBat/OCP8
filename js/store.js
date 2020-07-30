@@ -9,9 +9,9 @@
 	 *
 	 * @constructor
 	 *
-	 * @param {string} name The name of our DB we want to use.
-	 * @param {function} callback Our fake DB uses callbacks because in
-	 * real life you probably would be making AJAX calls.
+	 * @param {string} name the name of our DB we want to use
+	 * @param {function} callback our fake DB uses callbacks because in
+	 * real life you probably would be making AJAX calls
 	 */
 	function Store(name, callback) {
 		callback = callback || function () {};
@@ -27,15 +27,13 @@
 		callback.call(this, JSON.parse(localStorage[name]));
 	}
 
-// MÉTHODES (5) _______________________________________ */
-
 	/**
 	 * <b>DESCR:</b><br>
 	 * Finds items based on a query given as a JS object.
 	 *
-	 * @param {object} query The query to match against (i.e. {foo: 'bar'}).
-	 * @param {function} callback The callback to fire when the query has
-	 * completed running.
+	 * @param {object} query the query to match against (i.e. {foo: 'bar'})
+	 * @param {function} callback the callback to fire when the query has
+	 * completed running
 	 *
 	 * @example
 	 * db.find({foo: 'bar', hello: 'world'}, function (data) {
@@ -64,7 +62,7 @@
 	 * <b>DESCR:</b><br>
 	 * Will retrieve all data from the collection.
 	 *
-	 * @param {function} callback The callback to fire upon retrieving data.
+	 * @param {function} callback the callback to fire upon retrieving data
 	 */
 	Store.prototype.findAll = function (callback) {
 		callback = callback || function () {};
@@ -73,14 +71,11 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * Generates a random 6 digits number and returns it.
+	 * Generates randomly a 6 digits number and returns it.
 	 *
-	 * @function
-	 * @name generateNewId
-	 *
-	 * @returns {string} The generated number.
+	 * @returns {string} the generated number
 	 */
-	function generateNewId() {
+	Store.prototype.generateNewId = function () {
 		var generatedId = "";
 		var charset = "0123456789";
 
@@ -92,17 +87,14 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * Checks if the generated number is not already present in the database.
+	 * Checks if the generated number is not already there in the database.
 	 *
-	 * @function
-	 * @name isExistingId
-	 *
-	 * @param {string} id The generated 6 digits number.
-	 * @param {object} todos The object containing all the todos
+	 * @param {string} id the generated 6 digits number
+	 * @param {object} todos the object containing all the todos
 	 *
 	 * @returns {boolean}
 	 */
-	function isExistingId(id, todos) {
+	Store.prototype.isExistingId = function (id, todos) {
 		for (var i = 0; i < todos.length; i++) {
 			if (todos[i].id == id) {
 				return true
@@ -116,9 +108,9 @@
  	 * Will save the given data to the DB. If no item exists it will create a new
  	 * item, otherwise it'll simply update an existing item's properties.
  	 *
- 	 * @param {object} updateData The data to save back into the DB.
- 	 * @param {function} callback The callback to fire after saving.
- 	 * @param {number} id An optional param to enter an ID of an item to update.
+ 	 * @param {object} updateData the data to save back into the DB
+ 	 * @param {function} callback the callback to fire after saving
+ 	 * @param {number} id an optional param to enter an ID of an item to update
  	 */
 	Store.prototype.save = function (updateData, callback, id) {
 		var data = JSON.parse(localStorage[this._dbName]);
@@ -140,10 +132,10 @@
 			callback.call(this, todos);
 
 		} else {
-			var newId = generateNewId();
+			var newId = this.generateNewId();
 
-			while (isExistingId(newId, todos)) {
-				newId = generateNewId();
+			while (this.isExistingId(newId, todos)) {
+				newId = this.generateNewId();
 			}
 
 			updateData.id = parseInt(newId);
@@ -158,30 +150,19 @@
 	 * <b>DESCR:</b><br>
 	 * Will remove an item from the Store based on its ID.
 	 *
-	 * @param {number} id The ID of the item you want to remove.
-	 * @param {function} callback The callback to fire after saving.
+	 * @param {number} id the ID of the item you want to remove
+	 * @param {function} callback the callback to fire after saving
 	 */
 	Store.prototype.remove = function (id, callback) {
 		var data = JSON.parse(localStorage[this._dbName]);
 		var todos = data.todos;
-		var todoId;
-
+		// OPTIMIZATION #1
 		for (var i = 0; i < todos.length; i++) {
 			if (todos[i].id == id) {
-		// OPTIMISATION #1
+
 				todos.splice(i, 1)
 			}
 		}
-		// OPTIMISATION #2
-		// deuxième boucle redondante?
-		// pour chaque membre de l'array 'todos'
-		// for (var i = 0; i < todos.length; i++) {
-		// 	// si l'id du membre[i] correspond à todoId
-		// 	if (todos[i].id == todoId) {
-		// 		// coupe l'array 'todos' à hauteur du membre[i] pour 1 élément
-		// 		todos.splice(i, 1);
-		// 	}
-		// }
 
 		localStorage[this._dbName] = JSON.stringify(data);
 		callback.call(this, todos);
@@ -191,7 +172,7 @@
 	 * <b>DESCR:</b><br>
 	 * Will drop all storage and start fresh.
 	 *
-	 * @param {function} callback The callback to fire after dropping the data.
+	 * @param {function} callback the callback to fire after dropping the data
 	 */
 	Store.prototype.drop = function (callback) {
 		var data = {todos: []};

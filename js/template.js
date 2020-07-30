@@ -41,8 +41,6 @@
 		+	'</li>';
 	}
 
-// MÉTHODES (3) _______________________________________ */
-
 	/**
 	 * <b>DESCR:</b><br>
 	 * Creates an < li > HTML string and returns it for placement in the app.
@@ -50,8 +48,8 @@
 	 * NOTE: In real life you should be using a templating engine such as Mustache
 	 * or Handlebars, however, this is a vanilla JS example.
 	 *
-	 * @param {object} data The object containing keys you want to find in the
-	 *                      template to replace.
+	 * @param {object} data the object containing keys you want to find in the
+	 *                      template to replace
 	 * @returns {string} HTML String of an < li > element.
 	 *
 	 * @example
@@ -62,11 +60,10 @@
 	 * });
 	 */
 	Template.prototype.show = function (data) {
-		var i, l;
+		var i;
 		var view = '';
-		// pour chaque membre de data
-		// OPTIMISATION #3 ?? Pkoi pas i < data.length ?
-		for (i = 0, l = data.length; i < l; i++) {
+		// OPTIMIZATION #3
+		for (i = 0; i < data.length; i++) {
 			var template = this.defaultTemplate;
 			var completed = '';
 			var checked = '';
@@ -88,11 +85,11 @@
 
 	/**
 	 * <b>DESCR:</b><br>
-	 * Displays a counter of how many to dos are left to complete.
+	 * Displays a counter of how many todos are left to complete.
 	 *
-	 * @param {number} activeTodos The number of active todos.
+	 * @param {number} activeTodos the number of active todos
 	 *
-	 * @returns {string} String containing the count.
+	 * @returns {string} string containing the count
 	 */
 	Template.prototype.itemCounter = function (activeTodos) {
 		var plural = activeTodos === 1 ? '' : 's';
@@ -104,9 +101,9 @@
 	 * <b>DESCR:</b><br>
 	 * Updates the text within the "Clear completed" button.
 	 *
-	 * @param  {type} completedTodos The number of completed todos.
+	 * @param  {type} completedTodos the number of completed todos
 	 *
-	 * @returns {string} String containing the count.
+	 * @returns {string} string containing the count
 	 */
 	Template.prototype.clearCompletedButton = function (completedTodos) {
 		if (completedTodos > 0) {
