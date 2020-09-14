@@ -1,8 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" data-framework="javascript">
 	<head>
 		<meta charset="utf-8">
-		<title>To-do list app</title>
+		<title>OCP8 - "To-do list" App</title>
+		<meta name="viewport" content="initial-scale=1.0">
 		<!-- OPTIMIZATION #4 -->
 		<!-- <link rel="stylesheet" href="node_modules/todomvc-common/base.css"> -->
 		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
@@ -35,12 +36,34 @@
 				<button class="clear-completed">Clear completed</button>
 			</footer>
 		</section>
+		<section>
+			<p style="font-size: 1.5rem; font-family: system-ui; margin-top: 60px;">Project's goals :</p>
+			<div style="border-left: 4px solid lightgrey; font-size: 1.2rem; line-height: 1.5rem; font-family: system-ui;">
+				<ol>
+					<li>Set unit & functional tests in a web application</li>
+					<li>Optimize a project's performances with the DevTools</li>
+					<li>Take on an existing Javascript project</li>
+				</ol>
+			</div>
+		<nav class="bottom-nav">
+			<ul>
+				<li class="nav-category"><a href="https://github.com/JeqnBat/OCP8">github</a></li>
+				<li class="nav-category"><a href="https://ocp8.jeanbaptistepellier.fr/docs">documentation</a></li>
+				<li class="nav-category"><a href="https://ocp8.jeanbaptistepellier.fr/audit/AUDIT_OCP8.pdf">perfs audit</a></li>
+				<li class="nav-category"><a href="https://ocp8.jeanbaptistepellier.fr/test/SpecRunner.html">tests</a></li>
+			</ul>
+		</nav>
+		<div id="descr-0">Vizualize the code's evolution & optimizations on Github from day1 to project's end</div>
+		<div id="descr-1">Read the complete technical guide of the application & understand its mechanisms</div>
+		<div id="descr-2">Take a look at the audit I wrote concerning this app's main competitor & their performances</div>
+		<div id="descr-3">Watch this app's code being tested under Jasmine</div>
 		<footer class="info">
 			<p>Double-click to edit a todo</p>
 			<p>Created by Oscar Godson</p>
 			<p>Refactored by Christoph Burgmer</p>
 		</footer>
 		<script src="node_modules/todomvc-common/base.js"></script>
+		<script src="js/navmenu.js"></script>
 		<script src="js/helpers.js"></script>
 		<script src="js/store.js"></script>
 		<script src="js/model.js"></script>
