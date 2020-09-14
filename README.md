@@ -2,7 +2,7 @@
 # 'TODO-LIST APP'
 \
 *ENGLISH*
-### TOPIC : Integrate a WordPress website for a real estate agency based in Courchevel, France
+### TOPIC : Resume & improve an existing project
 **Project guidelines & instructions :**
 >You've just joined a small team who thinks that all the problems in the world are caused by people not being organized enough and that a little focus could change everything. Therefore, they've created what they call the best "to-do list" application in the world. The idea itself is great, but the code behind really isn't ! They have asked you to add tests and fix some bugs in the code.
 
