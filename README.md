@@ -43,7 +43,7 @@
 **Compétences évaluées :**
 1. Mettre en œuvre des tests unitaires et fonctionnels dans une application web
 2. Optimiser les performances d'un projet à l'aide des DevTools
-3. Reprendre en main un projet JavaScript existan
+3. Reprendre en main un projet JavaScript existant
 
 **Projet validé le :**
 - 1er août 2020
